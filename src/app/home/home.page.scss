@@ -1,0 +1,124 @@
+ion-content {
+  --background: var(--ion-color-step-50, #f7f9fa);
+}
+
+.main-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-btn {
+  --background: rgba(var(--ion-color-primary-rgb), 0.15);
+  --border-radius: 12px;
+  --box-shadow: none;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+
+.segment-wrapper {
+  background: var(--ion-background-color, #ffffff);
+  padding: 6px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+
+.amount-display {
+  background: var(--ion-background-color, #ffffff);
+  border-radius: 20px;
+  padding: 30px 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+
+  .amount-label {
+    margin: 0 0 10px 0;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--ion-color-medium);
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 4rem;
+    margin: 0;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -2px;
+    transition: color 0.3s ease;
+  }
+
+  .text-success { color: var(--ion-color-success); }
+  .text-danger { color: var(--ion-color-danger); }
+}
+
+.keypad {
+  padding: 0 10px;
+  
+  .key-btn {
+    width: 100%;
+    height: 75px;
+    background: var(--ion-background-color, #ffffff);
+    border: none;
+    border-radius: 16px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    margin: 6px 0;
+    transition: transform 0.1s;
+    
+    &:active {
+      transform: scale(0.95);
+      background: var(--ion-color-step-100, #f0f2f5);
+    }
+  }
+
+  .action-btn {
+    background: transparent;
+    box-shadow: none;
+    font-size: 1.8rem;
+    
+    &.text-danger { color: var(--ion-color-danger); font-size: 1.6rem; }
+    &.text-medium { color: var(--ion-color-medium); }
+  }
+}
+
+.payment-methods {
+  padding: 0 10px;
+  margin-top: 20px;
+  
+  .payment-btn {
+    width: 100%;
+    height: 90px;
+    border: none;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: transform 0.1s;
+
+    &:active {
+      transform: scale(0.95);
+    }
+    
+    ion-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    &.btn-success { background: linear-gradient(135deg, #2dd36f, #1fc25e); box-shadow: 0 8px 20px rgba(45, 211, 111, 0.3); }
+    &.btn-tertiary { background: linear-gradient(135deg, #5260ff, #4350ed); box-shadow: 0 8px 20px rgba(82, 96, 255, 0.3); }
+    &.btn-secondary { background: linear-gradient(135deg, #3dc2ff, #2bb5f5); box-shadow: 0 8px 20px rgba(61, 194, 255, 0.3); }
+  }
+}

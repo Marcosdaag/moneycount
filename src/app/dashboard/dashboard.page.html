@@ -1,0 +1,168 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" color="dark"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="dark" class="main-title">Resumen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" color="light">
+  
+  <div class="segment-wrapper ion-margin-bottom">
+    <ion-segment [(ngModel)]="period" (ionChange)="onPeriodChange($event)" mode="ios">
+      <ion-segment-button value="today">
+        <ion-label>Hoy</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="week">
+        <ion-label>Semana</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="month">
+        <ion-label>Mes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="custom">
+        <ion-label>Plazo</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- Custom Date Pickers -->
+  <ion-accordion-group *ngIf="period === 'custom'" class="custom-date-accordion ion-margin-bottom" expand="inset">
+    <ion-accordion value="dates">
+      <ion-item slot="header" color="white">
+        <ion-icon name="calendar-outline" slot="start" color="medium"></ion-icon>
+        <ion-label>Seleccionar Fechas</ion-label>
+      </ion-item>
+      <div class="ion-padding date-picker-container" slot="content">
+        <ion-item lines="none" class="date-item">
+          <ion-label position="stacked">Desde</ion-label>
+          <ion-datetime-button datetime="start-date"></ion-datetime-button>
+        </ion-item>
+        <ion-item lines="none" class="date-item">
+          <ion-label position="stacked">Hasta</ion-label>
+          <ion-datetime-button datetime="end-date"></ion-datetime-button>
+        </ion-item>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <!-- Modals for Datetimes -->
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="start-date" presentation="date" [(ngModel)]="customStart" (ionChange)="onCustomDateChange()"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="end-date" presentation="date" [(ngModel)]="customEnd" (ionChange)="onCustomDateChange()"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Key Metrics -->
+  <ion-card class="modern-card ion-margin-bottom">
+    <ion-card-content class="ion-text-center">
+      <p class="metric-label">GANANCIA NETA</p>
+      <h1 class="net-profit-amount" [class.positive]="gananciaNeta >= 0" [class.negative]="gananciaNeta < 0">
+        $ {{ gananciaNeta | number:'1.0-0' }}
+      </h1>
+      
+      <div class="metrics-grid ion-margin-top">
+        <div class="metric-box box-income">
+          <ion-icon name="arrow-up-circle" color="success"></ion-icon>
+          <p class="box-label">Ingresos</p>
+          <h3 class="box-value">$ {{ totalIngresos | number:'1.0-0' }}</h3>
+        </div>
+        <div class="metric-box box-expense">
+          <ion-icon name="arrow-down-circle" color="danger"></ion-icon>
+          <p class="box-label">Egresos</p>
+          <h3 class="box-value">$ {{ totalEgresos | number:'1.0-0' }}</h3>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Payment Methods Breakdown -->
+  <h3 class="section-title">Medios de Pago</h3>
+  
+  <div class="stats-container">
+    <!-- Efectivo -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon bg-success">
+          <ion-icon name="cash-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <h2>Efectivo</h2>
+          <p>{{ paymentMethodStats.efectivo.percentage | number:'1.0-1' }}% &bull; {{ paymentMethodStats.efectivo.count }} {{ paymentMethodStats.efectivo.count === 1 ? 'Venta' : 'Ventas' }}</p>
+        </div>
+        <div class="stat-amount">
+          <strong>$ {{ paymentMethodStats.efectivo.amount | number:'1.0-0' }}</strong>
+        </div>
+      </div>
+      <ion-progress-bar [value]="paymentMethodStats.efectivo.percentage / 100" color="success" class="minimal-bar"></ion-progress-bar>
+    </div>
+
+    <!-- Transferencia -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon bg-secondary">
+          <ion-icon name="phone-portrait-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <h2>Transferencia</h2>
+          <p>{{ paymentMethodStats.transferencia.percentage | number:'1.0-1' }}% &bull; {{ paymentMethodStats.transferencia.count }} {{ paymentMethodStats.transferencia.count === 1 ? 'Venta' : 'Ventas' }}</p>
+        </div>
+        <div class="stat-amount">
+          <strong>$ {{ paymentMethodStats.transferencia.amount | number:'1.0-0' }}</strong>
+        </div>
+      </div>
+      <ion-progress-bar [value]="paymentMethodStats.transferencia.percentage / 100" color="secondary" class="minimal-bar"></ion-progress-bar>
+    </div>
+
+    <!-- Tarjeta -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-icon bg-tertiary">
+          <ion-icon name="card-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <h2>Tarjeta</h2>
+          <p>{{ paymentMethodStats.tarjeta.percentage | number:'1.0-1' }}% &bull; {{ paymentMethodStats.tarjeta.count }} {{ paymentMethodStats.tarjeta.count === 1 ? 'Venta' : 'Ventas' }}</p>
+        </div>
+        <div class="stat-amount">
+          <strong>$ {{ paymentMethodStats.tarjeta.amount | number:'1.0-0' }}</strong>
+        </div>
+      </div>
+      <ion-progress-bar [value]="paymentMethodStats.tarjeta.percentage / 100" color="tertiary" class="minimal-bar"></ion-progress-bar>
+    </div>
+  </div>
+
+  <!-- Transaction History -->
+  <h3 class="section-title">Historial de Transacciones</h3>
+  
+  <div class="stats-container ion-margin-bottom">
+    <div *ngIf="transactions.length === 0" class="stat-card ion-text-center">
+      <p style="color: var(--ion-color-medium); margin: 0; font-size: 0.9rem;">No hay transacciones en este periodo.</p>
+    </div>
+
+    <div *ngFor="let t of transactions" class="stat-card transaction-item" (click)="openTransactionOptions(t)" style="cursor: pointer; position: relative;">
+      <ion-ripple-effect type="bounded"></ion-ripple-effect>
+      <div class="stat-header" style="margin-bottom: 0;">
+        <div class="stat-icon" [ngClass]="t.type === 'ingreso' ? 'bg-success' : 'bg-danger'" style="width: 36px; height: 36px; margin-right: 12px; border-radius: 10px;">
+          <ion-icon [name]="t.type === 'ingreso' ? 'arrow-up-outline' : 'arrow-down-outline'" style="font-size: 1.2rem;"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <h2 style="text-transform: capitalize; font-size: 0.95rem;">{{ t.payment_method }}</h2>
+          <p>{{ t.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="stat-amount" style="display: flex; align-items: center; gap: 8px;">
+          <strong [ngClass]="t.type === 'ingreso' ? 'text-success' : 'text-danger'">
+            {{ t.type === 'ingreso' ? '+' : '-' }} $ {{ t.amount | number:'1.0-0' }}
+          </strong>
+          <ion-icon name="ellipsis-vertical" style="color: var(--ion-color-medium); font-size: 1.1rem;"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
